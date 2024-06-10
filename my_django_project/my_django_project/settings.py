@@ -15,7 +15,7 @@ SECRET_KEY = 'your_secret_key'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['20.79.107.2']
+ALLOWED_HOSTS = ['https://imdb-clone.azurewebsites.net/']
 
 # Application definition
 INSTALLED_APPS = [
