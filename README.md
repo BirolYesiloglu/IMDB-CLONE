@@ -63,4 +63,6 @@ Frontend Responsiveness: Ensured the application was fully responsive by using B
 Azure,Netlify and Heroku(this is actually done but it wants 5$) problems.
 
 # Final NOTE
- All in all, I couldn't transfer the codes into some platforms. But I have tried a lot of different kind. Thank you for everything, I have learned a lot of things. Before this lessons I had no idea about developing a website. After each tries I got better but it is not of to transfer into Azure platform. So sorry for that.
+All in all, I couldn't transfer the codes into some platforms. But I have tried a lot of different kind. Thank you for everything, I have learned a lot of things. Before this lessons I had no idea about developing a website. After each tries I got better but it is not of to transfer into Azure platform. So sorry for that.
+Super user email = admin@hotmail.com
+Password = Admin123
