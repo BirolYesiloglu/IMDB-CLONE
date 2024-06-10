@@ -1,4 +1,4 @@
-# IMDB Clone Project
+#                                                       IMDB Clone Project
 Overview
 This project is an IMDb clone built using Django. The application allows users to browse movies, actors, and leave comments and ratings. Users can also search for movies and actors and add movies to their watchlist. This README provides an overview of the design, data model, assumptions made during development, and problems encountered.
 
@@ -29,7 +29,7 @@ Search: Users can search for movies and actors with real-time suggestions.
 Watchlist: Users can add movies to their watchlist.
 Comments and Ratings: Authenticated users can leave comments and ratings on movies.
 
-# Data Model
+#                                                        Data Model
 # Models
 User: Django's built-in User model is used for authentication.
 Profile: Extends the User model to include additional information.
