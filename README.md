@@ -1,4 +1,4 @@
-#                                                       IMDB Clone Project
+# IMDB Clone Project
 Overview
 This project is an IMDb clone built using Django. The application allows users to browse movies, actors, and leave comments and ratings. Users can also search for movies and actors and add movies to their watchlist. This README provides an overview of the design, data model, assumptions made during development, and problems encountered.
 
@@ -29,7 +29,7 @@ Search: Users can search for movies and actors with real-time suggestions.
 Watchlist: Users can add movies to their watchlist.
 Comments and Ratings: Authenticated users can leave comments and ratings on movies.
 
-#                                                        Data Model
+# Data Model
 # Models
 User: Django's built-in User model is used for authentication.
 Profile: Extends the User model to include additional information.
@@ -60,3 +60,7 @@ Real-time Search Suggestions: Initially, search suggestions were not very intuit
 Form Handling in Templates: Faced challenges with displaying and processing forms in templates. Ensured forms were correctly passed and processed in views.
 Database Migrations: Encountered issues with missing or inconsistent migration files. Resolved by manually creating and applying migrations.
 Frontend Responsiveness: Ensured the application was fully responsive by using Bootstrap and custom CSS
+Azure,Netlify and Heroku(this is actually done but it wants 5$) problems.
+
+# Final NOTE
+ All in all, I couldn't transfer the codes into some platforms. But I have tried a lot of different kind. Thank you for everything, I have learned a lot of things. Before this lessons I had no idea about developing a website. After each tries I got better but it is not of to transfer into Azure platform. So sorry for that.
