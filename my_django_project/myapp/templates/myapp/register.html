@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMDB Clone - Register</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="bg-dark text-white p-2">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <img src="{% static 'images/IMDB_Logo_2016.png' %}" alt="IMDB Logo" height="40">
+                <nav class="ml-4">
+                    <a href="{% url 'home' %}" class="text-white mr-3">Home</a>
+                </nav>
+            </div>
+            <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="get">
+                <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search IMDB" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <div class="d-flex align-items-center">
+                <img src="{% static 'images/IMDB_Pro_Logo.png' %}" alt="IMDB Pro Logo" height="40">
+                <a href="{% url 'watchlist' %}" class="text-white ml-3">Watchlist</a>
+                {% if user.is_authenticated %}
+                    <span class="text-white ml-3">Welcome, {{ user.first_name }}</span>
+                    <a href="{% url 'logout' %}" class="text-white ml-3">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="text-white ml-3">Sign In</a>
+                {% endif %}
+                <div class="dropdown ml-3">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        TR <i class="fa fa-globe"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" data-lang="TR">TR</a>
+                        <a class="dropdown-item" href="#" data-lang="EN">EN</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="container mt-4">
+        <section class="register-form">
+            <h2 class="text-center">Üye Ol</h2>
+            <div class="row mt-4">
+                <div class="col-md-8 offset-md-2">
+                    <button id="google-login" class="btn btn-danger btn-block mb-3">GOOGLE ile Giriş Yap</button>
+                    <form id="register" action="{% url 'register' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="first-name">Ad*</label>
+                            <input type="text" id="first-name" name="first_name" class="form-control" placeholder="Ad" required>
+                            {% if form.first_name.errors %}
+                                <div class="text-danger">
+                                    {{ form.first_name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Soyad*</label>
+                            <input type="text" id="last-name" name="last_name" class="form-control" placeholder="Soyad" required>
+                            {% if form.last_name.errors %}
+                                <div class="text-danger">
+                                    {{ form.last_name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">Kullanıcı email*</label>
+                            <input type="email" id="register-email" name="email" class="form-control" placeholder="Kullanıcı email" required>
+                            {% if form.email.errors %}
+                                <div class="text-danger">
+                                    {{ form.email.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Şifre*</label>
+                            <input type="password" id="register-password" name="password" class="form-control" placeholder="Şifre" required>
+                            {% if form.password.errors %}
+                                <div class="text-danger">
+                                    {{ form.password.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password">Tekrar*</label>
+                            <input type="password" id="confirm-password" name="confirm_password" class="form-control" placeholder="Tekrar" required>
+                            {% if form.confirm_password.errors %}
+                                <div class="text-danger">
+                                    {{ form.confirm_password.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Ülke*</label>
+                            <select id="country" name="country" class="custom-select" required>
+                                <option value="">Seçiniz</option>
+                                <option value="Türkiye">Türkiye</option>
+                                <option value="England">England</option>
+                                <!-- Add other countries if needed -->
+                            </select>
+                            {% if form.country.errors %}
+                                <div class="text-danger">
+                                    {{ form.country.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label for="city">Şehir</label>
+                            <select id="city" name="city" class="custom-select">
+                                <option value="">Seçiniz</option>
+                                <option value="İzmir">İzmir</option>
+                                <option value="Ankara">Ankara</option>
+                                <option value="İstanbul">İstanbul</option>
+                                <!-- Add other cities if needed -->
+                            </select>
+                            {% if form.city.errors %}
+                                <div class="text-danger">
+                                    {{ form.city.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Kayıt OL</button>
+                    </form>
+                    {% if form.non_field_errors %}
+                        <div class="text-danger text-center mt-2">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form validation for registration
+            const registerForm = document.querySelector('#register');
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(event) {
+                    const password = document.querySelector('#register-password').value;
+                    const confirmPassword = document.querySelector('#confirm-password').value;
+                    if (password !== confirmPassword) {
+                        event.preventDefault();
+                        alert('Passwords do not match!');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

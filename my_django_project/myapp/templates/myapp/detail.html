@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!-- Lightbox CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet">
+    <title>{{ movie.title }} - Movie Detail</title>
+    <style>
+        .navbar-custom {
+            background-color: #111;
+        }
+        .navbar-custom .navbar-brand, .navbar-custom .nav-link, .navbar-custom .dropdown-item {
+            color: white;
+        }
+        .navbar-custom .nav-link:hover, .navbar-custom .dropdown-item:hover {
+            color: #ff9d00;
+        }
+        .navbar-custom .dropdown-menu {
+            background-color: #222;
+        }
+        .navbar-custom .dropdown-menu .dropdown-item {
+            color: white;
+        }
+        .movie-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{% static movie.image %}") no-repeat center center;
+            background-size: cover;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .movie-details {
+            padding: 20px;
+        }
+        .movie-rating, .movie-popularity {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .movie-rating .fa-star, .movie-popularity .fa-line-chart {
+            margin-right: 10px;
+        }
+        .movie-rating span, .movie-popularity span {
+            font-size: 1.2em;
+        }
+        .actor {
+            text-align: center;
+        }
+        .actor img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+        .actor-name {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/IMDB_Logo_2016.png' %}" alt="IMDB Logo" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            All
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#">Titles</a>
+                            <a class="dropdown-item" href="#">TV Episodes</a>
+                            <a class="dropdown-item" href="#">Celebs</a>
+                            <a class="dropdown-item" href="#">Companies</a>
+                        </div>
+                    </li>
+                </ul>
+                <form class="d-flex my-2 my-lg-0 position-relative" action="{% url 'search' %}" method="get">
+                    <input id="search-input" class="form-control me-2" type="search" name="query" placeholder="Search IMDB" aria-label="Search">
+                    <div id="search-dropdown" class="search-dropdown"></div>
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link">Welcome, {{ user.first_name }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Sign In</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            TR <i class="fa fa-globe"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <a class="dropdown-item" href="#" data-lang="TR">TR</a>
+                            <a class="dropdown-item" href="#" data-lang="EN">EN</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<body>
+    <div class="movie-header">
+        <div class="container">
+            <h1>{{ movie.title }}</h1>
+            <p class="lead">{{ movie.description }}</p>
+            <div class="movie-rating">
+                <i class="fa fa-star"></i>
+                <span>{{ movie.rating }}/10</span>
+            </div>
+            <div class="movie-popularity">
+                <i class="fa fa-line-chart"></i>
+                <span>Popularity Points: {{ popularity_score }}</span>
+            </div>
+            <div class="movie-popularity">
+                <i class="fa fa-eye"></i>
+                <span>Views: {{ movie.views }}</span>
+            </div>
+            <div class="movie-popularity">
+                <i class="fa fa-trophy"></i>
+                <span>Popularity Rank: {{ popularity_rank }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="container movie-details">
+        <div class="row">
+            <div class="col-md-6">
+                <a href="{% static movie.image %}" data-lightbox="movie" data-title="{{ movie.title }}">
+                    <img src="{% static movie.image %}" class="img-fluid" alt="{{ movie.title }}">
+                </a>
+            </div>
+            <div class="col-md-6">
+                <video controls class="img-fluid">
+                    <source src="{% static movie.trailer %}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <h3>Top Cast</h3>
+            <div class="col-md-12 d-flex flex-wrap">
+                {% for movie_actor in movie.movieactor_set.all %}
+                <div class="actor col-md-3 text-center">
+                    <a href="{% static movie_actor.actor.image %}" data-lightbox="actors" data-title="{{ movie_actor.actor.name }}">
+                        <img src="{% static movie_actor.actor.image %}" class="img-fluid" alt="{{ movie_actor.actor.name }}" style="width: 150px; height: 150px;">
+                    </a>
+                    <p class="actor-name"><a href="{% url 'actor_detail' movie_actor.actor.id %}">{{ movie_actor.actor.name }}</a></p>
+                    <p>{{ movie_actor.role_name }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row mt-4">
+            <h3>Rank and Comment</h3>
+            <div class="col-md-6">
+                {% if user.is_authenticated %}
+                <form method="post" action="{% url 'movie_detail' movie.id %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="rank" class="form-label">Rank (1-10)</label>
+                        {{ rank_form.score }}
+                    </div>
+                    <button type="submit" class="btn btn-primary" name="rank_form">Submit Rank</button>
+                </form>
+                {% else %}
+                <p><a href="{% url 'login' %}">Sign in</a> to rank this movie.</p>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                {% if user.is_authenticated %}
+                <form method="post" action="{% url 'movie_detail' movie.id %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Comment</label>
+                        {{ comment_form.body }}
+                    </div>
+                    <button type="submit" class="btn btn-primary" name="comment_form">Submit Comment</button>
+                </form>
+                {% else %}
+                <p><a href="{% url 'login' %}">Sign in</a> to leave a comment.</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row mt-4">
+            <h3>User Comments</h3>
+            {% for comment in comments %}
+            <div class="col-md-12">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ comment.user.username }}</h5>
+                        <p class="card-text">{{ comment.body }}</p>
+                        <p class="card-text"><small class="text-muted">{{ comment.timestamp|date:"F j, Y, g:i a" }}</small></p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row mt-4">
+            <h3>User Ranks</h3>
+            {% for rank in ranks %}
+            <div class="col-md-12">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ rank.user.username }}</h5>
+                        <p class="card-text">Rank: {{ rank.score }}</p>
+                        <p class="card-text"><small class="text-muted">{{ rank.timestamp|date:"F j, Y, g:i a" }}</small></p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- Lightbox JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox-plus-jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        lightbox.option({
+            'resizeDuration': 200,
+            'wrapAround': true,
+            'alwaysShowNavOnTouchDevices': true,
+            'disableScrolling': true
+        });
+    </script>
+</body>
+</html>
+

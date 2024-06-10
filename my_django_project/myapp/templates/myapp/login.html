@@ -1,0 +1,70 @@
+<!-- templates/myapp/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMDB Clone - Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {% load static %}
+</head>
+<body>
+    <header class="bg-dark text-white p-2">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <img src="{% static 'images/IMDB_Logo_2016.png' %}" alt="IMDB Logo" height="40">
+                <nav class="ml-4">
+                    <a href="{% url 'home' %}" class="text-white mr-3">Home</a>
+                </nav>
+            </div>
+            <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}" method="get">
+                <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search IMDB" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <div class="d-flex align-items-center">
+                <img src="{% static 'images/IMDB_Pro_Logo.png' %}" alt="IMDB Pro Logo" height="40">
+                <a href="{% url 'watchlist' %}" class="text-white ml-3">Watchlist</a>
+                {% if user.is_authenticated %}
+                    <span class="text-white ml-3">Welcome, {{ user.first_name }}</span>
+                    <a href="{% url 'logout' %}" class="text-white ml-3">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="text-white ml-3">Sign In</a>
+                {% endif %}
+                <div class="dropdown ml-3">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        TR <i class="fa fa-globe"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" data-lang="TR">TR</a>
+                        <a class="dropdown-item" href="#" data-lang="EN">EN</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="container mt-4">
+        <section class="login-form">
+            <h2 class="text-center">Login</h2>
+            <form id="login" class="mt-4" action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+            {% if error %}
+                <p class="text-danger text-center mt-2">{{ error }}</p>
+            {% endif %}
+            <p class="text-center mt-2">Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+        </section>
+    </main>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMDB Clone - Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        .navbar-custom {
+            background-color: #111;
+        }
+        .navbar-custom .navbar-brand, .navbar-custom .nav-link, .navbar-custom .dropdown-item {
+            color: white;
+        }
+        .navbar-custom .nav-link:hover, .navbar-custom .dropdown-item:hover {
+            color: #ff9d00;
+        }
+        .navbar-custom .dropdown-menu {
+            background-color: #222;
+        }
+        .navbar-custom .dropdown-menu .dropdown-item {
+            color: white;
+        }
+        .search-dropdown {
+            position: absolute;
+            width: 100%;
+            background-color: white;
+            z-index: 1000;
+            border: 1px solid #ccc;
+            display: none;
+        }
+        .search-dropdown a {
+            color: #000;
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+        }
+        .search-dropdown a:hover {
+            background-color: #f1f1f1;
+        }
+        .carousel-item img {
+            height: 500px;
+            object-fit: cover;
+            object-position:50% 50%;
+        }
+        .carousel-caption {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/IMDB_Logo_2016.png' %}" alt="IMDB Logo" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            All
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#">Titles</a>
+                            <a class="dropdown-item" href="#">TV Episodes</a>
+                            <a class="dropdown-item" href="#">Celebs</a>
+                            <a class="dropdown-item" href="#">Companies</a>
+                        </div>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0 position-relative" action="{% url 'search' %}" method="get">
+                    <input id="search-input" class="form-control mr-sm-2" type="search" name="query" placeholder="Search IMDB" aria-label="Search">
+                    <div id="search-dropdown" class="search-dropdown"></div>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link">Welcome, {{ user.first_name }}</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Sign In</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            TR <i class="fa fa-globe"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <a class="dropdown-item" href="#" data-lang="TR">TR</a>
+                            <a class="dropdown-item" href="#" data-lang="EN">EN</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <main class="container mt-4">
+        <div id="movieCarousel" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner">
+                {% for movie in movies %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <a href="{% static movie.image %}" data-lightbox="poster" data-title="{{ movie.title }}">
+                        <img src="{% static movie.image %}" class="d-block w-100" alt="{{ movie.title }}">
+                    </a>
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>{{ movie.title }}</h5>
+                        <p>{{ movie.description }}</p>
+                        <p>Rating: {{ movie.rating }}</p>
+                        <a href="{% url 'movie_detail' movie.id %}" class="btn btn-primary">Details</a>
+                        {% if user.is_authenticated %}
+                        <button class="btn btn-warning add-to-watchlist" data-movie-id="{{ movie.id }}">Add to Watchlist</button>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-warning">Login to add to Watchlist</a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <a class="carousel-control-prev" href="#movieCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#movieCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <script>
+        const addToWatchlistUrl = "{% url 'add_to_watchlist' %}";
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add to Watchlist button click event
+            document.querySelectorAll('.add-to-watchlist').forEach(button => {
+                button.addEventListener('click', function() {
+                    const movieId = this.dataset.movieId;
+                    fetch(addToWatchlistUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({ movie_id: movieId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert('Movie added to watchlist');
+                        } else {
+                            alert('Error adding movie to watchlist: ' + data.message);
+                        }
+                    });
+                });
+            });
+
+            // Search input event listener
+            $('#search-input').on('input', function() {
+                const query = $(this).val();
+                if (query.length >= 3) {
+                    $.ajax({
+                        url: "{% url 'search_suggestions' %}",
+                        data: { query: query },
+                        success: function(data) {
+                            let dropdown = $('#search-dropdown');
+                            dropdown.empty();
+                            if (data.results.length > 0) {
+                                data.results.forEach(item => {
+                                    dropdown.append(`<a href="/movie/${item.id}/">${item.title}</a>`);
+                                });
+                                dropdown.show();
+                            } else {
+                                dropdown.hide();
+                            }
+                        }
+                    });
+                } else {
+                    $('#search-dropdown').hide();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
