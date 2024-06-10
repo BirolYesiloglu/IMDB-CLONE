@@ -13,7 +13,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'your-secret-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['20.79.107.2', 'localhost', 'https://imdb-clone.azurewebsites.net/']
+ALLOWED_HOSTS = ['20.79.107.2', 'localhost', 'imdb-clone-trial.netlify.app']
 
 # Application definition
 
