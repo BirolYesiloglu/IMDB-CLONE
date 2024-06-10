@@ -1,0 +1,22 @@
+body {
+    font-family: Arial, sans-serif;
+}
+header {
+    font-size: 1.5rem;
+}
+.register-form {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+}
+#google-login {
+    background-color: #dd4b39;
+    color: white;
+    border: none;
+}
+#google-login:hover {
+    background-color: #c23321;
+}
+#fb-root {
+padding: 30px; /* Adjust this value as needed */
+}
